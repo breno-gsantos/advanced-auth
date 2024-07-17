@@ -37,9 +37,8 @@ export function RegisterForm() {
       setSuccess(data.success)
     } else {
       setError(data.error)
+      form.reset();
     }
-
-    form.reset();
   }
 
   return (
@@ -54,7 +53,7 @@ export function RegisterForm() {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button className="w-full">Create an account</Button>
+          <Button className="w-full" disabled={form.formState.isSubmitting}>Create an account</Button>
         </form>
       </Form>
     </CardWrapper>
