@@ -10,8 +10,13 @@ import { FormFieldComponent } from "@/components/auth/FormFieldComponent";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form/FormError";
 import { FormSuccess } from "@/components/form/FormSuccess";
+import { login } from "@/actions/login";
+import { useState } from "react";
 
 export function LoginForm() {
+  const [error, setError] = useState<string | undefined>('');
+  const [success, setSuccess] = useState<string | undefined>('');
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -20,8 +25,19 @@ export function LoginForm() {
     }
   })
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    setError('');
+    setSuccess('');
+    
+    const data = await login(values);
+
+    if (data.success) {
+      setSuccess(data.success)
+    } else {
+      setError(data.error)
+    }
+
+    form.reset()
   }
 
   return (
@@ -32,8 +48,8 @@ export function LoginForm() {
             <FormFieldComponent control={form.control} name="email" label="Email" placeholder="Email address..." type="email" disabled={form.formState.isSubmitting} />
             <FormFieldComponent control={form.control} name="password" label="Password" placeholder="********" type="password" disabled={form.formState.isSubmitting}  />
           </div>
-          <FormError message="Invalid credentials" />
-          <FormSuccess message="Email sent" />
+          <FormError message={error} />
+          <FormSuccess message={success} />
           <Button className="w-full">Login</Button>
         </form>
       </Form>
