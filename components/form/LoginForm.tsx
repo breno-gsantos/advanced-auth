@@ -1,9 +1,42 @@
+'use client'
+
 import { CardWrapper } from "@/components/auth/CardWrapper";
+import { Form } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { loginSchema } from "@/schemas/data";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormFieldComponent } from "@/components/auth/FormFieldComponent";
+import { Button } from "@/components/ui/button";
+import { FormError } from "@/components/form/FormError";
+import { FormSuccess } from "@/components/form/FormSuccess";
 
 export function LoginForm() {
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: ''
+    }
+  })
+
+  function onSubmit(values: z.infer<typeof loginSchema>) {
+    console.log(values)
+  }
+
   return (
     <CardWrapper headerLabel="Welcome Back" backButtonLabel="Don't have an account?" backButtonHref="/register" showSocial>
-      Login Form
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-4">
+            <FormFieldComponent control={form.control} name="email" label="Email" placeholder="Email address..." type="email" disabled={form.formState.isSubmitting} />
+            <FormFieldComponent control={form.control} name="password" label="Password" placeholder="********" type="password" disabled={form.formState.isSubmitting}  />
+          </div>
+          <FormError message="Invalid credentials" />
+          <FormSuccess message="Email sent" />
+          <Button className="w-full">Login</Button>
+        </form>
+      </Form>
     </CardWrapper>
   )
 }
