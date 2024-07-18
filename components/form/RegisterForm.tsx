@@ -12,8 +12,10 @@ import { FormError } from "@/components/form/FormError";
 import { FormSuccess } from "@/components/form/FormSuccess";
 import { useState } from "react";
 import { register } from "@/actions/register";
+import { useRouter } from "next/navigation";
 
 export function RegisterForm() {
+  const router = useRouter()
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
 
@@ -35,10 +37,12 @@ export function RegisterForm() {
 
     if (data.success) {
       setSuccess(data.success)
+      router.push('/login')
+
     } else {
       setError(data.error)
-      form.reset();
     }
+    form.reset();
   }
 
   return (

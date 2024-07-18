@@ -31,9 +31,11 @@ export function LoginForm() {
     
     const data = await login(values);
 
-    if (data.success) {
+    if (data?.success) {
       setSuccess(data.success)
-    } else {
+    }
+
+    if (data?.error) {
       setError(data.error)
     }
 
@@ -50,7 +52,7 @@ export function LoginForm() {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button className="w-full">Login</Button>
+          <Button disabled={form.formState.isSubmitting} className="w-full">Login</Button>
         </form>
       </Form>
     </CardWrapper>

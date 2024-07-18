@@ -22,7 +22,7 @@ export function LoginButton({ children, asChild, mode = 'redirect' }: LoginButto
     }
 
   return (
-    <span onClick={onClick} className="cursor-pointer" >
+    <span onClick={onClick} className="cursor-pointer">
       {children}
     </span>
   )
